@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GameControl : MonoBehaviour
     List<GameObject> targets;
     public int numberOfTargets;
     bool done;
+    int targetsCollected;
+    public Text collected;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +24,7 @@ public class GameControl : MonoBehaviour
         cueTransform = cue.GetComponent<Transform>();
         targets = new List<GameObject>();
         SetUpTargets(numberOfTargets);
+        collected.text = "Collected so far " + targetsCollected;
         done = false;
     }
 
@@ -86,8 +90,9 @@ public class GameControl : MonoBehaviour
         if (!done)
         {
             UpdateCue();
-            int count = CountScore();            
-            if (count == numberOfTargets)
+            targetsCollected = CountScore();  
+            collected.text = "Collected so far " + targetsCollected;
+            if (targetsCollected == numberOfTargets)
             {
                 done = true;
             }
