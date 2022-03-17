@@ -60,6 +60,8 @@ public class GameControl : MonoBehaviour
             targets.Add(target);
         }
     }
+
+
     void SetTargetLocation(GameObject g)
     {
         Transform t = g.transform;
