@@ -18,8 +18,10 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/BallFlick.unity:
@@ -54,19 +56,23 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 1484}
+    - Class: 114
       Script: {instanceID: 2002}
     - Class: 114
       Script: {instanceID: 2290}
     - Class: 114
       Script: {instanceID: 2402}
     - Class: 114
-      Script: {instanceID: 2568}
+      Script: {instanceID: 2454}
     - Class: 114
-      Script: {instanceID: 2750}
+      Script: {instanceID: 2570}
     - Class: 114
-      Script: {instanceID: 3888}
+      Script: {instanceID: 2752}
     - Class: 114
-      Script: {instanceID: 15834}
+      Script: {instanceID: 2838}
+    - Class: 114
+      Script: {instanceID: 3890}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -78,6 +84,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
       Script: {instanceID: 0}
     - Class: 222
       Script: {instanceID: 0}
@@ -224,6 +232,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TextMeshProUGUI
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CollectTarget
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -466,7 +480,7 @@ ScriptsOnlyBuild:
     className: TMP_Settings
   - hash:
       serializedVersion: 2
-      Hash: cef90c37b0c29b6a70f4925af5f58dd9
+      Hash: 8950796ed78683f6b5dc42450fe42dc6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameControl
@@ -512,12 +526,6 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: TouchInputModule
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: CollectTarget
   platform: 19
   scenePathNames:
   - Assets/Scenes/BallFlick.unity
