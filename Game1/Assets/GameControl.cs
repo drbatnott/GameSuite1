@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.IO;
 
 public class GameControl : MonoBehaviour
 {
@@ -16,11 +18,19 @@ public class GameControl : MonoBehaviour
     public int numberOfTargets;
     bool done;
     int targetsCollected;
-    public Text collected, time;
+    public Text collected, time, levelText, levelBestTimeText,timeThisGo;
+    public GameObject resultPanel, nextLevelButton, repeatLevelButton;
+    int level;
+    float [] bestTime;
     float currentTimeElapsed;
+    public int levelsAvailable;
+    public int targetIncrement;
     // Start is called before the first frame update
     void Start()
     {
+       // TextWriter tw = new StreamWriter("Data.txt");
+        
+        resultPanel.SetActive(false);
         cueBallRigidBody = cueBall.GetComponent<Rigidbody>();
         cueTransform = cue.GetComponent<Transform>();
         targets = new List<GameObject>();
@@ -28,6 +38,16 @@ public class GameControl : MonoBehaviour
         collected.text = "Collected so far " + targetsCollected;
         done = false;
         currentTimeElapsed = 0;
+        level = 1;
+        levelText.text = "Level " + level;
+        bestTime = new float[levelsAvailable];
+        for(int i = 0; i < levelsAvailable; i++)
+        {
+            bestTime[i] = 999999f;
+            //tw.WriteLine("Level," + i + "," + bestTime[i]);
+        }
+        //tw.Close();
+        levelBestTimeText.text = "Level Best Time " + String.Format("{0:0.0}", bestTime[0]);
     }
 
     void SetUpTargets(int nTargets)
@@ -44,10 +64,11 @@ public class GameControl : MonoBehaviour
     {
         Transform t = g.transform;
         Vector3 pos = t.position;
-        float x = Random.Range(-4f, 4f);
-        float z = Random.Range(-4f, 4f);
+        float x = UnityEngine.Random.Range(-4f, 4f);
+        float z = UnityEngine.Random.Range(-3f, 3f);
         pos.x = x;
         pos.z = z;
+        pos.y = 0.25f;
         t.position = pos;
     }
 
@@ -95,12 +116,66 @@ public class GameControl : MonoBehaviour
             targetsCollected = CountScore();  
             collected.text = "Collected so far " + targetsCollected;
             currentTimeElapsed += Time.deltaTime;
-            time.text = "Time " + currentTimeElapsed;
+            time.text = "Time " + String.Format("{0:0.0}", currentTimeElapsed);
             if (targetsCollected == numberOfTargets)
             {
                 done = true;
+                timeThisGo.text = "Time\n" + String.Format("{0:0.0}", currentTimeElapsed);
+                if (currentTimeElapsed < bestTime[level - 1])
+                {
+                    bestTime[level - 1] = currentTimeElapsed;
+                    timeThisGo.text += "\nYou have a new best Time!";
+                    levelBestTimeText.text = "Level Best Time " + String.Format("{0:0.0}", currentTimeElapsed);
+                }
+                if(level < levelsAvailable)
+                {
+                    nextLevelButton.SetActive(true);
+
+                }
+                else
+                {
+                    nextLevelButton.SetActive(false);
+                }
+                resultPanel.SetActive(true);
             }
+        }   
+    }
+
+    void ResetValues()
+    {
+        currentTimeElapsed = 0;
+        resultPanel.SetActive(false);
+        targetsCollected = 0;
+        foreach (GameObject g in targets)
+        {
+            g.SetActive(true);
+            SetTargetLocation(g);
         }
+        levelText.text = "Level " + level;
+        done = false;
+        cueBall.transform.position = new Vector3(0f, 0.352f, 0f);
+        cueBallRigidBody.velocity = Vector3.zero;
+    }
+
+    public void OnRepeatLevel()
+    {
+        ResetValues();
+        levelBestTimeText.text = "Level Best Time " + String.Format("{0:0.0}", bestTime[level-1]);
+    }
+    public void OnNextLevel()
+    {
+        level++;
+        //Debug.Log(level);
+        ResetValues();
+        numberOfTargets += targetIncrement;
         
+        //Debug.Log(targets.Count);
+        for(int i = targets.Count; i < numberOfTargets; i++)
+        {
+            GameObject newTarget = GameObject.Instantiate(protoTarget);
+            SetTargetLocation(newTarget);
+            targets.Add(newTarget);
+        }       
+        levelBestTimeText.text = "Level Best Time " + String.Format("{0:0.0}", bestTime[level-1]);
     }
 }
