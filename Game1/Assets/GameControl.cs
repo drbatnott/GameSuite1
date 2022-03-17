@@ -16,7 +16,8 @@ public class GameControl : MonoBehaviour
     public int numberOfTargets;
     bool done;
     int targetsCollected;
-    public Text collected;
+    public Text collected, time;
+    float currentTimeElapsed;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +27,7 @@ public class GameControl : MonoBehaviour
         SetUpTargets(numberOfTargets);
         collected.text = "Collected so far " + targetsCollected;
         done = false;
+        currentTimeElapsed = 0;
     }
 
     void SetUpTargets(int nTargets)
@@ -92,6 +94,8 @@ public class GameControl : MonoBehaviour
             UpdateCue();
             targetsCollected = CountScore();  
             collected.text = "Collected so far " + targetsCollected;
+            currentTimeElapsed += Time.deltaTime;
+            time.text = "Time " + currentTimeElapsed;
             if (targetsCollected == numberOfTargets)
             {
                 done = true;

@@ -1344,8 +1344,9 @@ MonoBehaviour:
   cue: {fileID: 1905792782}
   rotationSpeed: 20
   protoTarget: {fileID: 9169071041829711913, guid: 043589bd398e9594c8ea588081f5c388, type: 3}
-  numberOfTargets: 5
+  numberOfTargets: 1
   collected: {fileID: 609266591}
+  time: {fileID: 1648603229}
 --- !u!1 &1905792782
 GameObject:
   m_ObjectHideFlags: 0
