@@ -18,18 +18,32 @@ public class GameControl : MonoBehaviour
     public int numberOfTargets;
     bool done;
     int targetsCollected;
-    public Text collected, time, levelText, levelBestTimeText,timeThisGo;
+    public Text collected, time, levelText, levelBestTimeText,timeThisGo, gameName;
     public GameObject resultPanel, nextLevelButton, repeatLevelButton;
     int level;
     float [] bestTime;
     float currentTimeElapsed;
     public int levelsAvailable;
     public int targetIncrement;
+    string userName;
+    int bestLevel;
     // Start is called before the first frame update
     void Start()
     {
-       // TextWriter tw = new StreamWriter("Data.txt");
-        
+        TextReader currentUser = new StreamReader("currentUser.txt");
+        userName = currentUser.ReadLine();
+        gameName.text = "Ball Flick Player: " + userName;
+        bestLevel = System.Int32.Parse(currentUser.ReadLine());
+        bestTime = new float[levelsAvailable];
+        for (int i = 0; i < bestLevel; i++)
+        {
+            bestTime[i] = (float)System.Double.Parse(currentUser.ReadLine());
+        }
+        for (int j = bestLevel; j < levelsAvailable; j++)
+        {
+            bestTime[j] = 999999f;
+        }
+        currentUser.Close();
         resultPanel.SetActive(false);
         cueBallRigidBody = cueBall.GetComponent<Rigidbody>();
         cueTransform = cue.GetComponent<Transform>();
@@ -40,13 +54,6 @@ public class GameControl : MonoBehaviour
         currentTimeElapsed = 0;
         level = 1;
         levelText.text = "Level " + level;
-        bestTime = new float[levelsAvailable];
-        for(int i = 0; i < levelsAvailable; i++)
-        {
-            bestTime[i] = 999999f;
-            //tw.WriteLine("Level," + i + "," + bestTime[i]);
-        }
-        //tw.Close();
         levelBestTimeText.text = "Level Best Time " + String.Format("{0:0.0}", bestTime[0]);
     }
 
@@ -138,6 +145,18 @@ public class GameControl : MonoBehaviour
                 {
                     nextLevelButton.SetActive(false);
                 }
+                if (level >= bestLevel)
+                {
+                    bestLevel = level;
+                    TextWriter currentUserData = new StreamWriter("currentUser.txt");
+                    currentUserData.WriteLine(userName);
+                    currentUserData.WriteLine(bestLevel);
+                    for(int i = 0; i < bestLevel; i++)
+                    {
+                        currentUserData.WriteLine(bestTime[i]);
+                    }
+                    currentUserData.Close();
+                }
                 resultPanel.SetActive(true);
             }
         }   
@@ -179,5 +198,26 @@ public class GameControl : MonoBehaviour
             targets.Add(newTarget);
         }       
         levelBestTimeText.text = "Level Best Time " + String.Format("{0:0.0}", bestTime[level-1]);
+    }
+
+    public void OnQuitButton()
+    {
+        TextWriter writeUserData = new StreamWriter("userdata.txt");
+        writeUserData.WriteLine("name," + userName);
+        writeUserData.WriteLine("levels," + bestLevel);
+        for (int i = 0; i < bestLevel; i++) {
+            writeUserData.WriteLine((i+1) + "," + bestTime[i]);
+        }
+        writeUserData.Close();
+        writeUserData = new StreamWriter("currentUser.txt");
+        writeUserData.WriteLine(userName);
+        writeUserData.WriteLine(bestLevel);
+        for (int i = 0; i < bestLevel; i++)
+        {
+            writeUserData.WriteLine((i + 1) + "," + bestTime[i]);
+        }
+        writeUserData.Close();
+        //next line only works in build
+        Application.Quit();
     }
 }
